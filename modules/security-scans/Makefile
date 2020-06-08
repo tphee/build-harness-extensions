@@ -28,7 +28,7 @@ imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
 	@$(call assert-set,SECURITYSCANS_TK)
-        @( \
+	@( \
 		#if [[ ! -z "$(shell echo $(TRAVIS_BRANCH) | grep ^release-[0-9][0-9]*\..*$ )" ]]; then \
 		$(SECURITYSCANS_TRIVY_INSTALL_COMMAND); \
 		if [ -x $(SECURITYSCANS_TRIVY) ]; then \
