@@ -12,6 +12,7 @@ SECURITYSCANS_DOCKER_REPO ?= "quay.io/open-cluster-management"
 # List of pattern to scan in the image
 SECURITYSCANS_PATTERNS ?= "password;_pwd;pw;credential;secret;signature;token;key;[\d|a-z]{40}@;=[\d|a-z]{40,64};\"[\d|a-z]{40,64}\""
 
+# trivy 
 SECURITYSCANS_TRIVY_INSTALL_COMMAND ?= "curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b /usr/local/bin"
 SECURITYSCANS_TRIVY ?= "/usr/local/bin/trivy"
 
@@ -40,7 +41,7 @@ imagescan/status:
 			fi; \
 		else \
 			echo "Trivy image scan tool failed to install.  No image scan this time" \
-		fi;
+		fi; \
 		#fi;
 	)
 
