@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# set -e
-
 IMAGE=$1
 
 if [[ -z "$IMAGE" ]]
