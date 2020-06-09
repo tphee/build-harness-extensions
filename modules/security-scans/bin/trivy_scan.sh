@@ -4,6 +4,8 @@ set -e
 
 IMAGE=$1
 
+echo ${IMAGE}
+
 if [[ -z "$IMAGE" ]]
 then
   echo "IMAGE not set. Skipping image scan."
@@ -11,7 +13,7 @@ then
 fi
 
 export TRIVY_VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz
+wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz
 tar zxvf trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz
 
 if [[ -x ./trivy ]]
