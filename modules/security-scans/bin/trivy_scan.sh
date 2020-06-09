@@ -10,12 +10,6 @@ then
   exit 0
 fi
 
-sudo apt-get install alien
-sudo alien -i package_file.rpm
-sudo alien package_file.rpm
-sudo dpkg -i package_file.deb
-
-
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b .
 
 if [[ -x ./trivy ]]
