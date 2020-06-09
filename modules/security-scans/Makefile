@@ -9,10 +9,6 @@ SECURITYSCANS_IMAGE_TAG_EXTENSION ?= ${COMPONENT_TAG_EXTENSION}
 # Build the details for the remote destination repo for the image
 SECURITYSCANS_DOCKER_REPO ?= "quay.io/open-cluster-management"
 
-# trivy 
-SECURITYSCANS_TRIVY_INSTALL_COMMAND ?= curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b ${SECURITYSCANS_DIR}
-SECURITYSCANS_TRIVY ?= ${SECURITYSCANS_DIR}/trivy
-
 # List of pattern to scan in the image
 SECURITYSCANS_PATTERNS ?= "password;_pwd;pw;credential;secret;signature;token;key;[\d|a-z]{40}@;=[\d|a-z]{40,64};\"[\d|a-z]{40,64}\""
 
@@ -29,10 +25,11 @@ imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
 	( \
-		echo $(SECURITYSCANS_TRIVY_INSTALL_COMMAND) \
-		$(SECURITYSCANS_TRIVY_INSTALL_COMMAND) \
-		if [ -x $(SECURITYSCANS_TRIVY) ] then \
-			$(SECURITYSCANS_TRIVY) image --ignore-unfixed --exit-code 1 ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION} \
+		export TRIVY_VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') \
+		wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
+		tar zxvf trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
+		if [ -x ./trivy ] then \
+			./trivy image --ignore-unfixed --exit-code 1 ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION} \
 			if [ $? -eq 1 ] then \
 				echo "Image scan failed" \
 				exit 1 \
