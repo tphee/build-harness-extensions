@@ -29,7 +29,6 @@ imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
 	@( \
-		#if [[ ! -z "$(shell echo $(TRAVIS_BRANCH) | grep ^release-[0-9][0-9]*\..*$ )" ]]; then \
 		$(SECURITYSCANS_TRIVY_INSTALL_COMMAND) \
 		if [ -x $(SECURITYSCANS_TRIVY) ] then \
 			$(SECURITYSCANS_TRIVY) image --ignore-unfixed --exit-code 1 ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION} \
@@ -42,7 +41,6 @@ imagescan/status:
 		else \
 			echo "Trivy image scan tool failed to install.  No image scan this time" \
 		fi \
-		#fi;
 	)
 
 ## Run all security scans
