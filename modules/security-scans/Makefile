@@ -14,6 +14,9 @@ SECURITYSCANS_DOCKER_REPO ?= "quay.io/open-cluster-management"
 # List of pattern to scan in the image
 SECURITYSCANS_PATTERNS ?= "password;_pwd;pw;credential;secret;signature;token;key;[\d|a-z]{40}@;=[\d|a-z]{40,64};\"[\d|a-z]{40,64}\""
 
+# Image scan flag
+SECURITYSCANS_IMAGESCANS_ENABLED ?= "true"
+
 .PHONY: security/scans configscan/report imagescan/status
 
 ## Scan the image config to find potential leaked credentials
@@ -26,7 +29,9 @@ configscan/report:
 imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
-	@${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION}
+	if [[ "${SECURITYSCANS_IMAGESCANS_ENABLED}" == "true" ]]; then
+		@${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION}
+	fi
 
 ## Run all security scans
 security/scans: %security/scans: %configscan/report %imagescan/status

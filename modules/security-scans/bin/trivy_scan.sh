@@ -4,7 +4,7 @@ IMAGE=$1
 
 if [[ -z "$IMAGE" ]]
 then
-  echo "IMAGE not set. Skipping image scan."
+  echo "IMAGE not set. Skipping image scans"
   exit 0
 fi
 
@@ -23,11 +23,11 @@ then
   ./trivy image --ignore-unfixed --exit-code 1 ${IMAGE}
   if [ $? -eq 1 ]
   then
-    echo "Error: Image scan failed!"
+    echo "Error: Image scans failed!"
     exit 1
   else
-    echo "Image scan passed"
+    echo "Image scans passed"
   fi
 else
-  echo "Trivy tool failed to install.  Skipping image scan."
+  echo "Trivy tool failed to install.  Skipping image scans"
 fi	
