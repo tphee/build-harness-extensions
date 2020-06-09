@@ -23,12 +23,12 @@ then
   ./trivy --version
   echo "Starting to scan image: ${IMAGE}"
   ./trivy image --ignore-unfixed --exit-code 1 ${IMAGE}
-  if [ $? -eq 0 ]
+  if [ $? -eq 1 ]
   then
-    echo "This is no known vulnerability in this image"
-  else
-    echo "ERROR: Image has known vulnerabilities!"
+    echo "Error: Image scan failed!"
     exit 1
+  else
+    echo "Image scan passed"
   fi
 else
   echo "Trivy tool failed to install.  Skipping image scan."
