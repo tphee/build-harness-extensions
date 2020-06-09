@@ -1,5 +1,6 @@
 # Full path to this modules' scripts directory.
 SECURITYSCANS_DIR=${BUILD_HARNESS_PATH}/../build-harness-extensions/modules/security-scans/scripts
+# Full path to this modules' bin directory.
 SECURITYSCANS_BIN=${BUILD_HARNESS_PATH}/../build-harness-extensions/modules/security-scans/bin
 
 # Find component name and component version from repo artifacts
@@ -25,7 +26,7 @@ configscan/report:
 imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
-	${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION}
+	@${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION}
 
 ## Run all security scans
 security/scans: %security/scans: %configscan/report %imagescan/status
