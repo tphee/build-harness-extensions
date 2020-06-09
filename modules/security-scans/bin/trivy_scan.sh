@@ -13,9 +13,10 @@ fi
 # install rpm
 sudo add-apt-repository universe
 sudo apt-get update
-sudo apt-get install alien
-sudo alien packagename.rpm
-sudo dpkg –i packagename.deb
+sudo apt-get install rpm
+#sudo apt-get install alien
+#sudo alien packagename.rpm
+#sudo dpkg –i packagename.deb
 
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b .
 
