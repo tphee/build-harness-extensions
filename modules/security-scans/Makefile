@@ -10,8 +10,8 @@ SECURITYSCANS_IMAGE_TAG_EXTENSION ?= ${COMPONENT_TAG_EXTENSION}
 SECURITYSCANS_DOCKER_REPO ?= "quay.io/open-cluster-management"
 
 # trivy 
-SECURITYSCANS_TRIVY_INSTALL_COMMAND ?= "curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b $(BUILD_HARNESS_PATH)"
-SECURITYSCANS_TRIVY ?= "$(BUILD_HARNESS_PATH)/trivy"
+SECURITYSCANS_TRIVY_INSTALL_COMMAND ?= "curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b ${SECURITYSCANS_DIR}"
+SECURITYSCANS_TRIVY ?= "${SECURITYSCANS_DIR}/trivy"
 
 # List of pattern to scan in the image
 SECURITYSCANS_PATTERNS ?= "password;_pwd;pw;credential;secret;signature;token;key;[\d|a-z]{40}@;=[\d|a-z]{40,64};\"[\d|a-z]{40,64}\""
