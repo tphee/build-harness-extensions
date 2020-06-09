@@ -10,9 +10,11 @@ then
   exit 0
 fi
 
-# export TRIVY_VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-# wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz
-# tar zxvf trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz
+sudo apt-get install alien
+sudo alien -i package_file.rpm
+sudo alien package_file.rpm
+sudo dpkg -i package_file.deb
+
 
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b .
 
