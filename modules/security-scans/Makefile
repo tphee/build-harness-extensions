@@ -1,5 +1,6 @@
 # Full path to this modules' scripts directory.
 SECURITYSCANS_DIR=${BUILD_HARNESS_PATH}/../build-harness-extensions/modules/security-scans/scripts
+SECURITYSCANS_BIN=${BUILD_HARNESS_PATH}/../build-harness-extensions/modules/security-scans/bin
 
 # Find component name and component version from repo artifacts
 SECURITYSCANS_IMAGE_NAME ?= $(shell cat ${BUILD_HARNESS_PATH}/../COMPONENT_NAME 2> /dev/null)
@@ -24,22 +25,7 @@ configscan/report:
 imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
-	( \
-		export TRIVY_VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') \
-		wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
-		tar zxvf trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
-		if [ -x ./trivy ] then \
-			./trivy image --ignore-unfixed --exit-code 1 ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION} \
-			if [ $? -eq 1 ] then \
-				echo "Image scan failed" \
-				exit 1 \
-			else \
-				echo "Image scan passed" \
-			fi \
-		else \
-			echo "Trivy image scan tool failed to install.  No image scan this time" \
-		fi \
-	)
+	${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION}
 
 ## Run all security scans
 security/scans: %security/scans: %configscan/report %imagescan/status
