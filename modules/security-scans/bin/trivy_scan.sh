@@ -25,9 +25,9 @@ then
   ./trivy image --ignore-unfixed --exit-code 1 ${IMAGE}
   if [ $? -eq 0 ]
   then
-    echo "Image scan passed"
+    echo "This is no known vulnerability in this image"
   else
-    echo "ERROR: Image scan failed!"
+    echo "ERROR: Image has known vulnerabilities!"
     exit 1
   fi
 else
