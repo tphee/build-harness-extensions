@@ -29,9 +29,9 @@ configscan/report:
 imagescan/status:
 	@$(call assert-set,SECURITYSCANS_IMAGE_NAME)
 	@$(call assert-set,SECURITYSCANS_IMAGE_VERSION)
-	ifeq (${SECURITYSCANS_IMAGESCANS_ENABLED},true)
-		@${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION}
-	endif
+	@if [[ "${SECURITYSCANS_IMAGESCANS_ENABLED}" == "true" ]]; \
+	then @${SECURITYSCANS_BIN}/trivy_scan.sh ${SECURITYSCANS_DOCKER_REPO}/${SECURITYSCANS_IMAGE_NAME}:${SECURITYSCANS_IMAGE_VERSION}${SECURITYSCANS_IMAGE_TAG_EXTENSION} \
+	fi
 
 ## Run all security scans
 security/scans: %security/scans: %configscan/report %imagescan/status
