@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 IMAGE=$1
 
@@ -10,27 +10,25 @@ then
   exit 0
 fi
 
-# install rpm
-sudo add-apt-repository universe
-sudo apt-get update
-sudo apt-get install rpm
-#sudo apt-get install alien
-#sudo alien packagename.rpm
-#sudo dpkg –i packagename.deb
+echo "Installing rpm"
+sudo add-apt-repository universe > /dev/null
+sudo apt-get update > /dev/null
+sudo apt-get install rpm > /dev/null
 
-curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b .
+echo "Installing trivy"
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b . > /dev/null
 
 if [[ -x ./trivy ]]
 then
   ./trivy --version
   echo "Starting to scan image: ${IMAGE}"
   ./trivy image --ignore-unfixed --exit-code 1 ${IMAGE}
-  if [ $? -eq 1 ]
+  if [ $? -eq 0 ]
   then
+    echo "Image scan passed"
+  else
     echo "ERROR: Image scan failed!"
     exit 1
-  else
-    echo "Image scan passed"
   fi
 else
   echo "Trivy tool failed to install.  Skipping image scan."
