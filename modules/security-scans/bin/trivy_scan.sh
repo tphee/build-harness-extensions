@@ -14,13 +14,13 @@ sudo apt-get update > /dev/null
 sudo apt-get install rpm > /dev/null
 
 echo "Installing trivy image scanning tool"
-curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b /usr/local/bin > /dev/null
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b . > /dev/null
 
-if [[ -x /usr/local/bin/trivy ]]
+if [[ -x ./trivy ]]
 then
-  /usr/local/bin/trivy --version
+  ./trivy --version
   echo "Starting to scan image: ${IMAGE}"
-  /usr/local/bin/trivy image --ignore-unfixed --exit-code 1 ${IMAGE}
+  ./trivy image --ignore-unfixed --exit-code 1 ${IMAGE}
   if [ $? -eq 1 ]
   then
     echo "Error: Image scans failed!"
