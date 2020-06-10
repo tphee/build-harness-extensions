@@ -13,7 +13,7 @@ sudo add-apt-repository universe > /dev/null
 sudo apt-get update > /dev/null
 sudo apt-get install rpm > /dev/null
 
-echo "Installing trivy"
+echo "Installing trivy image scanning tool"
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b . > /dev/null
 
 if [[ -x ./trivy ]]
